@@ -1,0 +1,133 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RkTheme = undefined;
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _lodash = require(_dependencyMap[0], "lodash");
+
+  var _lodash2 = _interopRequireDefault(_lodash);
+
+  var _defaultTheme = require(_dependencyMap[1], "./defaultTheme");
+
+  var _color = require(_dependencyMap[2], "./color");
+
+  var _typeManager = require(_dependencyMap[3], "./typeManager");
+
+  var _styleSheet = require(_dependencyMap[4], "./styleSheet");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  var themeUpdated = 'themeUpdated';
+
+  var ThemeManager = function () {
+    function ThemeManager() {
+      _classCallCheck(this, ThemeManager);
+
+      this._currentTheme = this._getDefault();
+      this._colors = _lodash2.default.cloneDeep(_color.RkColors);
+
+      this._updatePredefinedStyles();
+
+      this.listeners = [];
+    }
+
+    _createClass(ThemeManager, [{
+      key: "subscribeComponent",
+      value: function subscribeComponent(obj) {
+        this.listeners.push(obj);
+      }
+    }, {
+      key: "unsubscribeComponent",
+      value: function unsubscribeComponent(obj) {
+        _lodash2.default.pull(this.listeners, obj);
+      }
+    }, {
+      key: "_updatePredefinedStyles",
+      value: function _updatePredefinedStyles() {
+        this._predefinedStyles = this._createColorsStyles(this._colors);
+      }
+    }, {
+      key: "_createColorsStyles",
+      value: function _createColorsStyles(colors) {
+        var styleObject = {};
+
+        for (var colorName in colors) {
+          styleObject[colorName + 'Text'] = {
+            color: colors[colorName]
+          };
+          styleObject[colorName + 'Bg'] = {
+            backgroundColor: colors[colorName]
+          };
+          styleObject[colorName + 'Border'] = {
+            borderColor: colors[colorName]
+          };
+        }
+
+        return styleObject;
+      }
+    }, {
+      key: "_getDefault",
+      value: function _getDefault() {
+        return _lodash2.default.cloneDeep(_defaultTheme.DefaultTheme);
+      }
+    }, {
+      key: "setTheme",
+      value: function setTheme(theme) {
+        var baseTheme = this._getDefault();
+
+        var newTheme = _lodash2.default.merge(baseTheme, theme);
+
+        _lodash2.default.merge(this._currentTheme, newTheme);
+
+        _typeManager.TypeManager.invalidateTypes();
+
+        _styleSheet.RkStyleSheet._invalidate();
+
+        this.listeners.forEach(function (t) {
+          return t.forceUpdate();
+        });
+      }
+    }, {
+      key: "setType",
+      value: function setType(element, name, value, parentTypes) {
+        _typeManager.TypeManager.setType(element, name, value, parentTypes);
+      }
+    }, {
+      key: "registerComponent",
+      value: function registerComponent(element, types) {
+        _typeManager.TypeManager.registerTypes(element, types);
+      }
+    }, {
+      key: "setColor",
+      value: function setColor(name, value) {
+        this._colors[name] = value;
+
+        this._updatePredefinedStyles();
+      }
+    }, {
+      key: "current",
+      get: function get() {
+        return this._currentTheme;
+      }
+    }, {
+      key: "styles",
+      get: function get() {
+        return this._predefinedStyles;
+      }
+    }, {
+      key: "colors",
+      get: function get() {
+        return this._colors;
+      }
+    }]);
+
+    return ThemeManager;
+  }();
+
+  var RkTheme = exports.RkTheme = new ThemeManager();
+});

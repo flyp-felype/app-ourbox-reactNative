@@ -1,0 +1,169 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RkChoice = undefined;
+  var _jsxFileName = "/home/flyp/Projetos/ourboxapp/node_modules/react-native-ui-kitten/src/components/choice/rkChoice.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _react = require(_dependencyMap[0], "react");
+
+  var _react2 = _interopRequireDefault(_react);
+
+  var _reactNative = require(_dependencyMap[1], "react-native");
+
+  var _lodash = require(_dependencyMap[2], "lodash");
+
+  var _lodash2 = _interopRequireDefault(_lodash);
+
+  var _rkComponent = require(_dependencyMap[3], "../rkComponent");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var RkChoice = exports.RkChoice = function (_RkComponent) {
+    _inherits(RkChoice, _RkComponent);
+
+    function RkChoice(props) {
+      _classCallCheck(this, RkChoice);
+
+      var _this = _possibleConstructorReturn(this, (RkChoice.__proto__ || Object.getPrototypeOf(RkChoice)).call(this, props));
+
+      _this.componentName = 'RkChoice';
+      _this.typeMapping = {
+        container: {},
+        inner: {
+          imageSource: 'imageSource'
+        }
+      };
+      _this.state = {
+        selected: props.selected || false,
+        disabled: props.disabled || false
+      };
+      return _this;
+    }
+
+    _createClass(RkChoice, [{
+      key: "componentWillReceiveProps",
+      value: function componentWillReceiveProps(nextProps) {
+        if (nextProps.selected !== this.state.selected) {
+          this.setState({
+            selected: nextProps.selected
+          });
+        }
+      }
+    }, {
+      key: "_onPress",
+      value: function _onPress(e) {
+        if (!this.props.disabled) {
+          var selected = !this.state.selected;
+          this.setState({
+            selected: selected
+          });
+          this.props.onChange && this.props.onChange(selected, e);
+        }
+      }
+    }, {
+      key: "_defaultRenderContentFunction",
+      value: function _defaultRenderContentFunction(renderArgs) {
+        var imageSource = this.extractNonStyleValue(renderArgs.rkStyle.inner, 'imageSource');
+        return _react2.default.createElement(_reactNative.Image, {
+          style: [renderArgs.rkStyle.inner, this.props.contentStyle],
+          source: imageSource,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 189
+          }
+        });
+      }
+    }, {
+      key: "_defineStyles",
+      value: function _defineStyles() {
+        var computedTypes = this.props.rkType ? this.props.rkType.split(" ") : [];
+        computedTypes.unshift("");
+
+        if (this.state.selected && this.state.disabled) {
+          computedTypes.forEach(function (v, k, a) {
+            return a[k] += 'SelectedDisabled';
+          });
+        } else {
+          if (this.state.selected) computedTypes.forEach(function (v, k, a) {
+            return a[k] += 'Selected';
+          });
+          if (this.state.disabled) computedTypes.forEach(function (v, k, a) {
+            return a[k] += 'Disabled';
+          });
+        }
+
+        var _defineStyles2 = this.defineStyles(_lodash2.default.join(computedTypes, " ")),
+            container = _defineStyles2.container,
+            inner = _defineStyles2.inner;
+
+        var rkChoiceContent = this.props.renderContentFunction ? this.props.renderContentFunction({
+          isDisabled: this.state.disabled,
+          isSelected: this.state.selected,
+          rkStyle: {
+            inner: inner
+          }
+        }) : this._defaultRenderContentFunction({
+          isDisabled: this.state.disabled,
+          isSelected: this.state.selected,
+          rkStyle: {
+            inner: inner
+          }
+        });
+        return {
+          container: container,
+          rkChoiceContent: rkChoiceContent
+        };
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _this2 = this;
+
+        var _defineStyles3 = this._defineStyles(),
+            container = _defineStyles3.container,
+            rkChoiceContent = _defineStyles3.rkChoiceContent;
+
+        if (this.props.inTrigger) {
+          return _react2.default.createElement(
+            _reactNative.View,
+            {
+              style: [container, this.props.style],
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 219
+              }
+            },
+            rkChoiceContent
+          );
+        } else {
+          return _react2.default.createElement(
+            _reactNative.TouchableOpacity,
+            {
+              activeOpacity: this.props.disabled ? 1 : 0.2,
+              style: [container, this.props.style],
+              onPress: function onPress(e) {
+                _this2._onPress(e);
+              },
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 225
+              }
+            },
+            rkChoiceContent
+          );
+        }
+      }
+    }]);
+
+    return RkChoice;
+  }(_rkComponent.RkComponent);
+});

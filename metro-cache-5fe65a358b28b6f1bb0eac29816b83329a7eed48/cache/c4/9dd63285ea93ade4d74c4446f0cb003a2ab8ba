@@ -1,0 +1,261 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RkTabView = undefined;
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _class,
+      _temp,
+      _jsxFileName = "/home/flyp/Projetos/ourboxapp/node_modules/react-native-ui-kitten/src/components/tab/rkTabView.js";
+
+  var _react = require(_dependencyMap[0], "react");
+
+  var _react2 = _interopRequireDefault(_react);
+
+  var _reactNative = require(_dependencyMap[1], "react-native");
+
+  var _lodash = require(_dependencyMap[2], "lodash");
+
+  var _lodash2 = _interopRequireDefault(_lodash);
+
+  var _rkComponent = require(_dependencyMap[3], "../rkComponent");
+
+  var _rkTab = require(_dependencyMap[4], "./rkTab");
+
+  var _rkText = require(_dependencyMap[5], "../text/rkText");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var RkTabView = exports.RkTabView = (_temp = _class = function (_RkComponent) {
+    _inherits(RkTabView, _RkComponent);
+
+    function RkTabView(props) {
+      _classCallCheck(this, RkTabView);
+
+      var _this = _possibleConstructorReturn(this, (RkTabView.__proto__ || Object.getPrototypeOf(RkTabView)).call(this, props));
+
+      _this.componentName = 'RkTabView';
+      _this.typeMapping = {
+        container: {},
+        headerContainer: {},
+        tabContainer: {
+          backgroundColor: 'backgroundColor',
+          borderColor: 'borderColor',
+          borderWidth: 'borderWidth'
+        },
+        content: {
+          color: 'color'
+        },
+        contentContainer: {}
+      };
+      _this.selectedType = 'selected';
+      _this.state = {
+        index: +props.index || 0
+      };
+
+      if (_this.props.rkTypeSelected) {
+        _this.selectedType = _this.props.rkTypeSelected;
+      } else {
+        var base = _this.props.rkType ? _this.props.rkType.split(' ')[0] : undefined;
+
+        if (base) {
+          _this.selectedType = "" + base + _lodash2.default.upperFirst(_this.selectedType);
+        }
+      }
+
+      return _this;
+    }
+
+    _createClass(RkTabView, [{
+      key: "_onContainerLayout",
+      value: function _onContainerLayout(e, tabsCount) {
+        var width = e.nativeEvent.layout.width;
+        var tabWidth = width / tabsCount;
+        this.setState({
+          tabWidth: tabWidth
+        });
+      }
+    }, {
+      key: "_defineStyles",
+      value: function _defineStyles(selected) {
+        if (selected) return this.defineStyles(this.selectedType);
+        return this.defineStyles();
+      }
+    }, {
+      key: "_selectTab",
+      value: function _selectTab(id) {
+        if (this.state.index != id) {
+          this.setState({
+            index: +id
+          });
+          this.props.onTabChanged && typeof this.props.onTabChanged === 'function' && this.props.onTabChanged(id);
+        }
+      }
+    }, {
+      key: "_getTabs",
+      value: function _getTabs(child) {
+        if (!Array.isArray(child)) child = [];
+        return child.filter(function (elem) {
+          return elem.type === _rkTab.RkTab;
+        });
+      }
+    }, {
+      key: "_renderTab",
+      value: function _renderTab(tab, id, scrollableHeader) {
+        var _this2 = this;
+
+        var inner = tab.props.title;
+        var content = void 0;
+
+        var _defineStyles2 = this._defineStyles(this.state.index === +id),
+            boxStyle = _defineStyles2.tabContainer,
+            innerStyle = _defineStyles2.content;
+
+        if (typeof inner === 'function') {
+          content = inner(this.state.index === +id);
+        } else if (typeof inner === 'string') {
+          boxStyle.push(tab.props.style);
+          innerStyle.push(tab.props.contentStyle);
+
+          if (this.state.index === +id) {
+            boxStyle.push(tab.props.styleSelected);
+            innerStyle.push(tab.props.contentStyleSelected);
+          }
+
+          content = _react2.default.createElement(
+            _rkText.RkText,
+            {
+              style: innerStyle,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 313
+              }
+            },
+            inner
+          );
+        }
+
+        var containerStyle = [{
+          flex: 1
+        }];
+        if (scrollableHeader) containerStyle.push({
+          width: this.state.tabWidth
+        });
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          {
+            style: [containerStyle, boxStyle],
+            key: id,
+            onPress: function onPress() {
+              return _this2._selectTab(id);
+            },
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 320
+            }
+          },
+          content
+        );
+      }
+    }, {
+      key: "_renderTabs",
+      value: function _renderTabs(tabs, scrollableHeader) {
+        var _this3 = this;
+
+        var contentContainerStyle = scrollableHeader ? {} : {
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: scrollableHeader ? 'flex-start' : 'center'
+        };
+        return _react2.default.createElement(
+          _reactNative.ScrollView,
+          {
+            onLayout: function onLayout(e) {
+              _this3._onContainerLayout(e, _this3.props.maxVisibleTabs);
+            },
+            scrollEnabled: scrollableHeader,
+            showsHorizontalScrollIndicator: false,
+            showsVerticalScrollIndicator: false,
+            bounces: false,
+            horizontal: true,
+            contentContainerStyle: contentContainerStyle,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 333
+            }
+          },
+          tabs.map(function (tab, i) {
+            return _this3._renderTab(tab, i, scrollableHeader);
+          })
+        );
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var scrollableHeader = !!this.props.maxVisibleTabs;
+        var tabsUnderContent = !!this.props.tabsUnderContent;
+
+        var tabs = this._getTabs(this.props.children);
+
+        var _defineStyles3 = this.defineStyles(),
+            headerContainer = _defineStyles3.headerContainer,
+            container = _defineStyles3.container,
+            contentContainer = _defineStyles3.contentContainer,
+            otherStyles = _objectWithoutProperties(_defineStyles3, ["headerContainer", "container", "contentContainer"]);
+
+        var tabsView = _react2.default.createElement(
+          _reactNative.View,
+          {
+            key: "tabsView",
+            style: [headerContainer, this.props.headerContainerStyle],
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 355
+            }
+          },
+          this._renderTabs(tabs, scrollableHeader)
+        );
+
+        var contentView = _react2.default.createElement(
+          _reactNative.View,
+          {
+            key: "contentView",
+            style: contentContainer,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 360
+            }
+          },
+          tabs[this.state.index]
+        );
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          {
+            style: [{
+              flex: 1,
+              justifyContent: 'flex-start'
+            }, container, this.props.style],
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 366
+            }
+          },
+          tabsUnderContent ? [contentView, tabsView] : [tabsView, contentView]
+        );
+      }
+    }]);
+
+    return RkTabView;
+  }(_rkComponent.RkComponent), _class.Tab = _rkTab.RkTab, _temp);
+});

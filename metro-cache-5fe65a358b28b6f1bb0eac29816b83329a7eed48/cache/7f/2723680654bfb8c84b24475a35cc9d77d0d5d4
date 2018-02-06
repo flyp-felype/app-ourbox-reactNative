@@ -1,0 +1,100 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RkStyleSheet = undefined;
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _lodash = require(_dependencyMap[0], "lodash");
+
+  var _lodash2 = _interopRequireDefault(_lodash);
+
+  var _themeManager = require(_dependencyMap[1], "./themeManager");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  var objects = [];
+  var patternStyles = [];
+  var id = 0;
+
+  var ThemedStyleSheet = function () {
+    function ThemedStyleSheet() {
+      _classCallCheck(this, ThemedStyleSheet);
+    }
+
+    _createClass(ThemedStyleSheet, [{
+      key: "_getStyle",
+      value: function _getStyle(style) {
+        if (typeof style === 'function') {
+          return style(_themeManager.RkTheme.current);
+        }
+
+        return style;
+      }
+    }, {
+      key: "_invalidate",
+      value: function _invalidate() {
+        var _this = this;
+
+        patternStyles.forEach(function (patternObj) {
+          var styles = _this._getStyle(patternObj.style);
+
+          var _loop = function _loop(key) {
+            var _$find = _lodash2.default.find(patternObj.computedIds, function (o) {
+              return o.key === key;
+            }),
+                id = _$find.id;
+
+            objects[id] = styles[key];
+          };
+
+          for (var key in styles) {
+            _loop(key);
+          }
+        });
+      }
+    }, {
+      key: "_wrapToObject",
+      value: function _wrapToObject(computedIds) {
+        var obj = {};
+        computedIds.forEach(function (item) {
+          Object.defineProperty(obj, item.key, {
+            get: function get() {
+              return objects[item.id];
+            }
+          });
+        });
+        return obj;
+      }
+    }, {
+      key: "create",
+      value: function create(style) {
+        var styles = this._getStyle(style);
+
+        var computedIds = [];
+
+        for (var key in styles) {
+          id++;
+          objects[id] = styles[key];
+          computedIds.push({
+            key: key,
+            id: id
+          });
+        }
+
+        patternStyles.push({
+          style: style,
+          computedIds: computedIds
+        });
+        return this._wrapToObject(computedIds);
+      }
+    }]);
+
+    return ThemedStyleSheet;
+  }();
+
+  var RkStyleSheet = exports.RkStyleSheet = new ThemedStyleSheet();
+});

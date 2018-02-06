@@ -1,0 +1,12 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+   module.exports = require(_dependencyMap[0], "react-native/Libraries/Image/AssetRegistry").registerAsset({
+      "__packager_asset": true,
+      "httpServerLocation": "/assets/node_modules/react-native-ui-kitten/src/assets/img/choice",
+      "width": 54,
+      "height": 54,
+      "scales": [1, 2, 3],
+      "hash": "226ea7ce3cf30d08e05720e9c03627c2",
+      "name": "empty",
+      "type": "png"
+   });
+});

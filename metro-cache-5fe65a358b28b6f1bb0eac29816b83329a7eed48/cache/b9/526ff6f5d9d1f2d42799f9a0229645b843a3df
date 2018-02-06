@@ -1,0 +1,472 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RkModalImg = undefined;
+
+  var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+  var _jsxFileName = "/home/flyp/Projetos/ourboxapp/node_modules/react-native-ui-kitten/src/components/image/rkModalImg.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _react = require(_dependencyMap[0], "react");
+
+  var _react2 = _interopRequireDefault(_react);
+
+  var _reactNative = require(_dependencyMap[1], "react-native");
+
+  var _lodash = require(_dependencyMap[2], "lodash");
+
+  var _lodash2 = _interopRequireDefault(_lodash);
+
+  var _rkButton = require(_dependencyMap[3], "../button/rkButton");
+
+  var _rkText = require(_dependencyMap[4], "../text/rkText");
+
+  var _rkComponent = require(_dependencyMap[5], "../rkComponent");
+
+  var _themeManager = require(_dependencyMap[6], "../../styles/themeManager");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var RkModalImg = exports.RkModalImg = function (_RkComponent) {
+    _inherits(RkModalImg, _RkComponent);
+
+    function RkModalImg(props) {
+      _classCallCheck(this, RkModalImg);
+
+      var _this = _possibleConstructorReturn(this, (RkModalImg.__proto__ || Object.getPrototypeOf(RkModalImg)).call(this, props));
+
+      _this.componentName = 'RkModalImg';
+      _this.typeMapping = {
+        img: {},
+        header: {},
+        footerContent: {},
+        headerContent: {},
+        footer: {},
+        headerText: {},
+        imgContainer: {},
+        modal: {}
+      };
+      _this.firstOrientationChange = true;
+      _this.needUpdateScroll = false;
+      _this.state = {
+        opacity: new _reactNative.Animated.Value(1),
+        visible: false,
+        width: undefined,
+        height: undefined,
+        index: props.index || 0
+      };
+      return _this;
+    }
+
+    _createClass(RkModalImg, [{
+      key: "componentDidUpdate",
+      value: function componentDidUpdate() {
+        var _this2 = this;
+
+        var updateScroll = function updateScroll() {
+          _this2.refs.listView.scrollTo({
+            x: _this2.state.index * _this2.state.width,
+            animated: false
+          });
+
+          _this2.needUpdateScroll = false;
+        };
+
+        if (this.needUpdateScroll && this.refs.listView) {
+          if (_reactNative.Platform.OS === 'ios') {
+            updateScroll();
+          } else {
+            _lodash2.default.delay(updateScroll, 100);
+          }
+        }
+      }
+    }, {
+      key: "_renderList",
+      value: function _renderList(source, index, props) {
+        var _this3 = this;
+
+        var ds = new _reactNative.ListView.DataSource({
+          rowHasChanged: function rowHasChanged(r1, r2) {
+            return r1 !== r2;
+          }
+        });
+        return _react2.default.createElement(_reactNative.ListView, {
+          ref: "listView",
+          onScroll: function onScroll(e) {
+            return _this3._onScroll(e);
+          },
+          dataSource: ds.cloneWithRows(source.map(function (s) {
+            return {
+              img: s
+            };
+          })),
+          renderRow: function renderRow(source) {
+            return _this3._renderImage(source.img, props);
+          },
+          horizontal: true,
+          pagingEnabled: true,
+          renderSeparator: function renderSeparator() {
+            return null;
+          },
+          showsHorizontalScrollIndicator: false,
+          showsVerticalScrollIndicator: false,
+          directionalLockEnabled: true,
+          scrollEventThrottle: 100,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 184
+          }
+        });
+      }
+    }, {
+      key: "_renderImage",
+      value: function _renderImage(source, props) {
+        var _this4 = this;
+
+        return _react2.default.createElement(
+          _reactNative.TouchableWithoutFeedback,
+          {
+            style: {
+              flex: 1
+            },
+            onPress: function onPress() {
+              return _this4._toggleControls();
+            },
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 203
+            }
+          },
+          _react2.default.createElement(_reactNative.Image, _extends({
+            source: source
+          }, props, {
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 205
+            }
+          }))
+        );
+      }
+    }, {
+      key: "_toggleControls",
+      value: function _toggleControls() {
+        _reactNative.Animated.timing(this.state.opacity, {
+          toValue: this.state.opacity._value ? 0 : 1
+        }).start();
+      }
+    }, {
+      key: "_renderFooter",
+      value: function _renderFooter(options) {
+        var footerStyle = this.styles ? this.styles.footerContent : {};
+        return _react2.default.createElement(_reactNative.View, {
+          style: footerStyle,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 220
+          }
+        });
+      }
+    }, {
+      key: "_renderHeader",
+      value: function _renderHeader(options) {
+        var headerContent = this.styles ? this.styles.headerContent : {};
+        var headerText = this.styles ? this.styles.headerText : {};
+        return _react2.default.createElement(
+          _reactNative.View,
+          {
+            style: headerContent,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 228
+            }
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            {
+              style: {
+                flex: 1,
+                alignItems: 'flex-start'
+              },
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 229
+              }
+            },
+            _react2.default.createElement(
+              _rkButton.RkButton,
+              {
+                rkType: "clear",
+                onPress: options.closeImage,
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 230
+                }
+              },
+              "Close"
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            {
+              style: {
+                flex: 1,
+                alignItems: 'center'
+              },
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 232
+              }
+            },
+            _react2.default.createElement(
+              _rkText.RkText,
+              {
+                style: headerText,
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 233
+                }
+              },
+              this._renderPageNumbers()
+            )
+          ),
+          _react2.default.createElement(_reactNative.View, {
+            style: {
+              flex: 1
+            },
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 235
+            }
+          })
+        );
+      }
+    }, {
+      key: "_renderPageNumbers",
+      value: function _renderPageNumbers() {
+        if (Array.isArray(this.props.source)) {
+          var pageText = +this.state.index + +1;
+          pageText += '/';
+          pageText += this.props.source.length;
+          return _react2.default.createElement(
+            _reactNative.Text,
+            {
+              style: _themeManager.RkTheme.styles.whiteText,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 246
+              }
+            },
+            pageText
+          );
+        } else return null;
+      }
+    }, {
+      key: "_onScroll",
+      value: function _onScroll(e) {
+        var imageIndex = Math.round(e.nativeEvent.contentOffset.x / this.state.width);
+
+        if (imageIndex >= 0 && imageIndex <= this.props.source.length && imageIndex != this.state.index) {
+          this.setState({
+            index: imageIndex
+          });
+        }
+      }
+    }, {
+      key: "_closeImage",
+      value: function _closeImage() {
+        this.setState({
+          visible: false
+        });
+      }
+    }, {
+      key: "_onOrientationChange",
+      value: function _onOrientationChange() {
+        if (!this.firstOrientationChange) {
+          this.needUpdateScroll = true;
+          this.forceUpdate();
+        } else {
+          this.firstOrientationChange = undefined;
+        }
+      }
+    }, {
+      key: "_updateDimensionsState",
+      value: function _updateDimensionsState() {
+        var _Dimensions$get = _reactNative.Dimensions.get('window'),
+            height = _Dimensions$get.height,
+            width = _Dimensions$get.width;
+
+        this.state.height = height;
+        this.state.width = width;
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _this5 = this;
+
+        var _props = this.props,
+            imgContainerStyle = _props.imgContainerStyle,
+            visible = _props.visible,
+            animationType = _props.animationType,
+            transparent = _props.transparent,
+            modalStyle = _props.modalStyle,
+            modalImgStyle = _props.modalImgStyle,
+            headerStyle = _props.headerStyle,
+            footerStyle = _props.footerStyle,
+            source = _props.source,
+            index = _props.index,
+            imgStyle = _props.style,
+            imgProps = _objectWithoutProperties(_props, ["imgContainerStyle", "visible", "animationType", "transparent", "modalStyle", "modalImgStyle", "headerStyle", "footerStyle", "source", "index", "style"]);
+
+        var _defineStyles = this.defineStyles(),
+            header = _defineStyles.header,
+            footerContent = _defineStyles.footerContent,
+            headerContent = _defineStyles.headerContent,
+            footer = _defineStyles.footer,
+            headerText = _defineStyles.headerText,
+            img = _defineStyles.img,
+            imgContainer = _defineStyles.imgContainer,
+            modal = _defineStyles.modal,
+            modalImg = _defineStyles.modalImg;
+
+        this.styles = {
+          header: [header, headerStyle],
+          footerContent: footerContent,
+          headerContent: headerContent,
+          footer: [footer, footerStyle],
+          headerText: headerText
+        };
+
+        var renderHeader = this.props.renderHeader || this._renderHeader.bind(this);
+
+        var renderFooter = this.props.renderFooter || this._renderFooter.bind(this);
+
+        animationType = animationType || 'fade';
+        transparent = transparent === undefined ? false : transparent;
+        visible = visible === undefined ? this.state.visible : visible;
+
+        this._updateDimensionsState();
+
+        if (visible) {
+          imgProps.style = [imgProps.style, {
+            height: this.state.height,
+            width: this.state.width
+          }, modalImg, modalImgStyle];
+        }
+
+        var closeImage = this._closeImage.bind(this);
+
+        var pageNumber = +this.state.index + 1;
+        var totalPages = this.props.source.length;
+        var basicSource = Array.isArray(source) ? source[index] : source;
+        return _react2.default.createElement(
+          _reactNative.View,
+          {
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 341
+            }
+          },
+          _react2.default.createElement(
+            _reactNative.TouchableWithoutFeedback,
+            {
+              style: [imgContainer, imgContainerStyle],
+              onPress: function onPress() {
+                _this5.needUpdateScroll = true;
+
+                _this5.setState({
+                  visible: true
+                });
+              },
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 342
+              }
+            },
+            _react2.default.createElement(_reactNative.Image, _extends({
+              source: basicSource,
+              style: [img, imgStyle]
+            }, imgProps, {
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 344
+              }
+            }))
+          ),
+          _react2.default.createElement(
+            _reactNative.Modal,
+            {
+              supportedOrientations: ['portrait', 'landscape'],
+              onRequestClose: closeImage,
+              animationType: animationType,
+              transparent: transparent,
+              visible: visible,
+              onOrientationChange: this._onOrientationChange.bind(this),
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 346
+              }
+            },
+            _react2.default.createElement(
+              _reactNative.View,
+              {
+                style: [modal, modalStyle],
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 352
+                }
+              },
+              Array.isArray(source) ? this._renderList(source, index, imgProps) : this._renderImage(basicSource, imgProps),
+              _react2.default.createElement(
+                _reactNative.Animated.View,
+                {
+                  style: [this.styles.header, {
+                    opacity: this.state.opacity
+                  }],
+                  __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 354
+                  }
+                },
+                renderHeader({
+                  closeImage: closeImage,
+                  pageNumber: pageNumber,
+                  totalPages: totalPages
+                })
+              ),
+              _react2.default.createElement(
+                _reactNative.Animated.View,
+                {
+                  style: [this.styles.footer, {
+                    opacity: this.state.opacity
+                  }],
+                  __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 357
+                  }
+                },
+                renderFooter({
+                  closeImage: closeImage,
+                  pageNumber: pageNumber,
+                  totalPages: totalPages
+                })
+              )
+            )
+          )
+        );
+      }
+    }]);
+
+    return RkModalImg;
+  }(_rkComponent.RkComponent);
+});

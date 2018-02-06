@@ -1,0 +1,191 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RkComponent = undefined;
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _react = require(_dependencyMap[0], "react");
+
+  var _react2 = _interopRequireDefault(_react);
+
+  var _reactNative = require(_dependencyMap[1], "react-native");
+
+  var _lodash = require(_dependencyMap[2], "lodash");
+
+  var _lodash2 = _interopRequireDefault(_lodash);
+
+  var _typeManager = require(_dependencyMap[3], "../styles/typeManager.js");
+
+  var _themeManager = require(_dependencyMap[4], "../styles/themeManager.js");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var RkComponent = exports.RkComponent = function (_React$Component) {
+    _inherits(RkComponent, _React$Component);
+
+    function RkComponent() {
+      var _ref;
+
+      var _temp, _this, _ret;
+
+      _classCallCheck(this, RkComponent);
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RkComponent.__proto__ || Object.getPrototypeOf(RkComponent)).call.apply(_ref, [this].concat(args))), _this), _this.componentName = '', _this.typeMapping = {}, _this.baseStyle = '_base', _this.defaultType = 'basic', _this.defaultTypeMappingElement = undefined, _temp), _possibleConstructorReturn(_this, _ret);
+    }
+
+    _createClass(RkComponent, [{
+      key: "defineStyles",
+      value: function defineStyles(additionalTypes) {
+        var rkTypes = this._getTypesString(this.props.rkType || '');
+
+        additionalTypes = this._getTypesString(additionalTypes);
+
+        var types = this._getTypesString([this.defaultType, rkTypes, additionalTypes]);
+
+        types = types && types.length ? types.split(' ') : [];
+        return this._getTypes(types);
+      }
+    }, {
+      key: "extractNonStyleValue",
+      value: function extractNonStyleValue(style, property) {
+        var val = _lodash2.default.find(style, function (e) {
+          return e.hasOwnProperty(property);
+        });
+
+        if (val) {
+          style.splice(style.indexOf(val), 1);
+        } else {
+          return val;
+        }
+
+        return val[property];
+      }
+    }, {
+      key: "_getTypesString",
+      value: function _getTypesString(types) {
+        var typesString = types;
+
+        if (Array.isArray(types)) {
+          typesString = _lodash2.default.join(types, ' ');
+        }
+
+        return typesString;
+      }
+    }, {
+      key: "_getStyleValue",
+      value: function _getStyleValue(value) {
+        if (typeof value === 'object' && value !== null) {
+          if (value.hasOwnProperty(_reactNative.Platform.OS)) {
+            value = this._getStyleValue(value[_reactNative.Platform.OS]);
+          }
+        } else if (typeof value === 'function') {
+          value = value(_themeManager.RkTheme.current);
+        }
+
+        return value;
+      }
+    }, {
+      key: "_getTypes",
+      value: function _getTypes(rkTypes) {
+        var _this2 = this;
+
+        var usedTypes = this._getUsedTypes(rkTypes);
+
+        var componentTypes = _typeManager.TypeManager.types(_themeManager.RkTheme.current)[this.componentName] || [];
+        var styles = {};
+        var baseStyle = componentTypes[this.baseStyle];
+
+        if (baseStyle) {
+          usedTypes = [baseStyle].concat(_toConsumableArray(usedTypes));
+        }
+
+        usedTypes.forEach(function (usedType) {
+          for (var key in usedType) {
+            if (_this2.typeMapping.hasOwnProperty(key)) {
+              _this2.fillElementStyles(styles, key, usedType[key]);
+            } else {
+              var element = _this2.findTypeMappingElementByKey(key, _this2.typeMapping) || _this2.defaultTypeMappingElement || _lodash2.default.keys(_this2.typeMapping)[0];
+
+              _this2.fillElementStyle(styles, element, key, usedType[key]);
+            }
+          }
+        });
+        return styles;
+      }
+    }, {
+      key: "fillElementStyle",
+      value: function fillElementStyle(styles, element, key, value) {
+        this.createStyleIfNotExists(styles, element);
+        var styleKey = this.typeMapping[element][key];
+        if (!styleKey) styleKey = key;
+
+        var styleValue = this._getStyleValue(value);
+
+        this._mergeStyles(styles[element], styleKey, styleValue);
+      }
+    }, {
+      key: "fillElementStyles",
+      value: function fillElementStyles(styles, element, value) {
+        for (var styleKey in value) {
+          this.fillElementStyle(styles, element, styleKey, value[styleKey]);
+        }
+      }
+    }, {
+      key: "createStyleIfNotExists",
+      value: function createStyleIfNotExists(styles, key) {
+        styles[key] === undefined && (styles[key] = []);
+      }
+    }, {
+      key: "findTypeMappingElementByKey",
+      value: function findTypeMappingElementByKey(key, typeMapping) {
+        var resultComplexStyle = void 0;
+
+        for (var complexStyle in typeMapping) {
+          if (typeMapping[complexStyle].hasOwnProperty(key)) {
+            resultComplexStyle = complexStyle;
+            break;
+          }
+        }
+
+        return resultComplexStyle;
+      }
+    }, {
+      key: "_mergeStyles",
+      value: function _mergeStyles(element, styleKey, value) {
+        var index = _lodash2.default.findIndex(element, function (e) {
+          return e.hasOwnProperty(styleKey);
+        });
+
+        if (index >= 0) element[index][styleKey] = value;else element.push(_defineProperty({}, styleKey, value));
+      }
+    }, {
+      key: "_getUsedTypes",
+      value: function _getUsedTypes(rkTypes) {
+        var usedTypes = [];
+        var componentTypes = _typeManager.TypeManager.types(_themeManager.RkTheme.current)[this.componentName] || [];
+        rkTypes.forEach(function (type) {
+          if (componentTypes[type]) usedTypes.push(componentTypes[type]);
+        });
+        return usedTypes;
+      }
+    }]);
+
+    return RkComponent;
+  }(_react2.default.Component);
+});

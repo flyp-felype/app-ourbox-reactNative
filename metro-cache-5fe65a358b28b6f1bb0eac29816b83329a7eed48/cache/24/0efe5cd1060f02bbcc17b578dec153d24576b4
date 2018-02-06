@@ -1,0 +1,13 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+   module.exports = require(_dependencyMap[0], "react-native/Libraries/Image/AssetRegistry").registerAsset({
+      "__packager_asset": true,
+      "httpServerLocation": "/assets/node_modules/react-native-ui-kitten/src/assets/img/choice",
+      "width": 18,
+      "height": 18,
+      "scales": [1, 2, 3],
+      "hash": "709bd203c6844c350aa0d7f8e4fc9c60",
+      "name": "checkMark",
+      "type": "png",
+      "fileHashes": ["69dd8e8fd12f14c709b973ae0fc2dc64", "d70e30c3888d07b9f6c3b1f21467fb5c", "b392cc368cdcacaebad2b9da203708b6"]
+   });
+});

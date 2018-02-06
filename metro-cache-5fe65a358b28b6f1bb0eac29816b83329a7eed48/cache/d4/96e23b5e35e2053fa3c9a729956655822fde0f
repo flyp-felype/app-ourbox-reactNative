@@ -1,0 +1,98 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.TypeManager = undefined;
+
+  var _class,
+      _temp,
+      _this = this;
+
+  var _defaultTypes = require(_dependencyMap[0], "./defaultTypes.js");
+
+  var _themeManager = require(_dependencyMap[1], "./themeManager.js");
+
+  var _reactNative = require(_dependencyMap[2], "react-native");
+
+  var _lodash = require(_dependencyMap[3], "lodash");
+
+  var _lodash2 = _interopRequireDefault(_lodash);
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  var TypeManager = exports.TypeManager = (_temp = _class = function TypeManager() {
+    _classCallCheck(this, TypeManager);
+  }, _class._userTypes = [], _class._themableTypes = {}, _class.types = function (theme) {
+    if (!_this._themedTypes) {
+      _this._themedTypes = {};
+
+      _lodash2.default.forOwn(TypeManager._themableTypes, function (value, key) {
+        _lodash2.default.set(_this._themedTypes, key, value(theme));
+      });
+
+      _this._themedTypes = _lodash2.default.merge((0, _defaultTypes.DefaultTypes)(theme), _this._themedTypes, TypeManager._userTypes);
+    }
+
+    return _this._themedTypes;
+  }, _class.setType = function (element, name, value, parentTypes) {
+    if (typeof parentTypes === "string") parentTypes = parentTypes.split(' ');
+
+    var newType = TypeManager._createType(value, parentTypes, element);
+
+    _lodash2.default.set(TypeManager._userTypes, [[element], [name]], newType);
+
+    TypeManager.invalidateTypes();
+  }, _class.registerTypes = function (element, types) {
+    _lodash2.default.set(TypeManager._themableTypes, [element], types);
+
+    TypeManager.invalidateTypes();
+  }, _class.invalidateTypes = function () {
+    _this._themedTypes = undefined;
+  }, _class._createType = function (type, parentTypes, componentName) {
+    var newType = {};
+
+    if (parentTypes && parentTypes.length > 0) {
+      parentTypes.forEach(function (typeName) {
+        TypeManager._mergeTypes(newType, TypeManager.types(_themeManager.RkTheme.current)[componentName][typeName]);
+      });
+
+      TypeManager._mergeTypes(newType, type);
+    } else {
+      newType = type;
+    }
+
+    return newType;
+  }, _class._mergeTypes = function (baseType, typeForMerge) {
+    var typeForMergeValue = void 0,
+        baseTypeValue = void 0;
+
+    for (var key in typeForMerge) {
+      baseTypeValue = TypeManager._getStyleValue(baseType[key]);
+      typeForMergeValue = TypeManager._getStyleValue(typeForMerge[key]);
+
+      if (baseTypeValue) {
+        if (typeof typeForMergeValue === 'object') {
+          typeof baseTypeValue !== 'object' && (baseType[key] = {});
+
+          TypeManager._mergeTypes(baseType[key], typeForMerge[key]);
+        } else {
+          baseType[key] = typeForMergeValue;
+        }
+      } else {
+        baseType[key] = typeForMergeValue;
+      }
+    }
+  }, _class._getStyleValue = function (value) {
+    var styleValue = value;
+
+    if (typeof value === 'object' && value !== null) {
+      styleValue = value.hasOwnProperty(_reactNative.Platform.OS) ? TypeManager._getStyleValue(value[_reactNative.Platform.OS]) : Object.create(value);
+    } else if (typeof value === 'function') {
+      styleValue = value(_themeManager.RkTheme.current);
+    }
+
+    return styleValue;
+  }, _temp);
+});

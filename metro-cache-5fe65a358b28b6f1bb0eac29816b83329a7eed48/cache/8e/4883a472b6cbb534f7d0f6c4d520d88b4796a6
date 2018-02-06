@@ -1,0 +1,251 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RkOptionsList = undefined;
+  var _jsxFileName = "/home/flyp/Projetos/ourboxapp/node_modules/react-native-ui-kitten/src/components/picker/rkOptionsList.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _react = require(_dependencyMap[0], "react");
+
+  var _react2 = _interopRequireDefault(_react);
+
+  var _reactNative = require(_dependencyMap[1], "react-native");
+
+  var _rkOption = require(_dependencyMap[2], "./rkOption");
+
+  var _rkComponent = require(_dependencyMap[3], "../rkComponent");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var RkOptionsList = exports.RkOptionsList = function (_RkComponent) {
+    _inherits(RkOptionsList, _RkComponent);
+
+    function RkOptionsList(props) {
+      _classCallCheck(this, RkOptionsList);
+
+      var _this = _possibleConstructorReturn(this, (RkOptionsList.__proto__ || Object.getPrototypeOf(RkOptionsList)).call(this, props));
+
+      _this.componentName = 'RkOptionsList';
+      var ds = new _reactNative.ListView.DataSource({
+        rowHasChanged: function rowHasChanged(r1, r2) {
+          return true;
+        }
+      });
+      _this.optionHeight = _this.props.optionHeight || 30;
+      _this.optionNumberOnPicker = _this.props.optionNumberOnPicker || 3;
+      _this.pickerHeight = _this.optionNumberOnPicker * _this.optionHeight;
+      _this.optionsData = _this.updateOptionsData(_this.props.data, _this.optionNumberOnPicker);
+      _this.state = {
+        dataSource: ds.cloneWithRows(_this.optionsData),
+        selectedOption: _this.props.selectedOption,
+        ds: ds
+      };
+      return _this;
+    }
+
+    _createClass(RkOptionsList, [{
+      key: "componentDidUpdate",
+      value: function componentDidUpdate(prevProps, prevState) {
+        if (this.props.scrollToSelected !== prevProps.scrollToSelected && this.props.scrollToSelected) {
+          this.setInitialOptions();
+        }
+      }
+    }, {
+      key: "onScrollBeginDrag",
+      value: function onScrollBeginDrag() {
+        this.dragStart = true;
+        this.timer && clearTimeout(this.timer);
+      }
+    }, {
+      key: "onMomentumScrollBegin",
+      value: function onMomentumScrollBegin() {
+        this.momentumStart = true;
+        this.timer && clearTimeout(this.timer);
+      }
+    }, {
+      key: "onScrollEndDrag",
+      value: function onScrollEndDrag(e, id) {
+        var _this2 = this;
+
+        var _e = {
+          nativeEvent: {
+            contentOffset: {
+              y: e.nativeEvent.contentOffset.y
+            }
+          }
+        };
+        this.dragStart = false;
+        this.timer && clearTimeout(this.timer);
+        this.timer = setTimeout(function () {
+          if (!_this2.dragStart && !_this2.momentumStart) {
+            _this2.selectOption(_e, id);
+          }
+        }, 10);
+      }
+    }, {
+      key: "onMomentumScrollEnd",
+      value: function onMomentumScrollEnd(e, id) {
+        var _e = {
+          nativeEvent: {
+            contentOffset: {
+              y: e.nativeEvent.contentOffset.y
+            }
+          }
+        };
+        this.momentumStart = false;
+        this.timer && clearTimeout(this.timer);
+
+        if (!this.dragStart) {
+          this.selectOption(_e, id);
+        }
+      }
+    }, {
+      key: "setInitialOptions",
+      value: function setInitialOptions() {
+        var _this3 = this;
+
+        var selectedIndex = this.findIndexByValue(this.state.selectedOption, this.props.data);
+        this.setState({
+          selectedOption: this.props.data[selectedIndex]
+        });
+
+        _reactNative.InteractionManager.runAfterInteractions(function () {
+          return _this3.scrollToIndex(selectedIndex);
+        });
+
+        this.props.onSelect(this.state.selectedOption, this.props.id);
+      }
+    }, {
+      key: "findIndexByValue",
+      value: function findIndexByValue(expectableValue, array) {
+        var _this4 = this;
+
+        var expectableIndex = Math.round(array.length / 2);
+        array.forEach(function (value, index) {
+          if (_this4.compareOptions(value, expectableValue)) expectableIndex = index;
+        });
+        return expectableIndex;
+      }
+    }, {
+      key: "compareOptions",
+      value: function compareOptions(option1, option2) {
+        return option1.key && option2.key && option1.key === option2.key || !option1.key && !option2.key && option1 === option2;
+      }
+    }, {
+      key: "scrollToIndex",
+      value: function scrollToIndex(index) {
+        this.listRef.scrollTo({
+          x: 0,
+          y: index * this.optionHeight,
+          animated: true
+        });
+      }
+    }, {
+      key: "updateOptionsData",
+      value: function updateOptionsData(optionsData, optionNumberOnPicker) {
+        return this.createEmptyArray(optionNumberOnPicker / 2).concat(optionsData.concat(this.createEmptyArray(optionNumberOnPicker / 2)));
+      }
+    }, {
+      key: "createEmptyArray",
+      value: function createEmptyArray(arrayLength) {
+        return Array.apply(null, new Array(Math.floor(arrayLength))).map(function (_, i) {
+          return ' ';
+        });
+      }
+    }, {
+      key: "selectOption",
+      value: function selectOption(e, id) {
+        var y = e.nativeEvent.contentOffset ? e.nativeEvent.contentOffset.y : 0;
+        var selectedIndex = Math.round(y / this.optionHeight);
+        this.setState({
+          selectedOption: this.props.data[selectedIndex],
+          dataSource: this.state.ds.cloneWithRows(this.optionsData)
+        });
+        this.scrollToIndex(selectedIndex);
+        this.props.onSelect(this.props.data[selectedIndex], id);
+      }
+    }, {
+      key: "renderOption",
+      value: function renderOption(option, optionBlock) {
+        return _react2.default.createElement(_rkOption.RkOption, {
+          data: option,
+          selectedOption: this.state.selectedOption,
+          style: optionBlock,
+          optionHeight: this.optionHeight,
+          optionRkType: this.props.optionRkType,
+          selectedOptionRkType: this.props.selectedOptionRkType,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 127
+          }
+        });
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _this5 = this;
+
+        var highlightVarStyle = {
+          top: (this.optionNumberOnPicker - 1) / 2 * this.optionHeight,
+          height: this.optionHeight
+        };
+        return _react2.default.createElement(
+          _reactNative.View,
+          {
+            style: this.props.optionListContainerStyle,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 143
+            }
+          },
+          _react2.default.createElement(_reactNative.View, {
+            style: [highlightVarStyle, this.props.highlightBlockStyle],
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 144
+            }
+          }),
+          _react2.default.createElement(_reactNative.ListView, {
+            bounces: false,
+            showsVerticalScrollIndicator: false,
+            ref: function ref(flatListRef) {
+              return _this5.listRef = flatListRef;
+            },
+            onMomentumScrollBegin: function onMomentumScrollBegin(e) {
+              return _this5.onMomentumScrollBegin();
+            },
+            onMomentumScrollEnd: function onMomentumScrollEnd(e) {
+              return _this5.onMomentumScrollEnd(e, _this5.props.id);
+            },
+            onScrollBeginDrag: function onScrollBeginDrag(e) {
+              return _this5.onScrollBeginDrag();
+            },
+            onScrollEndDrag: function onScrollEndDrag(e) {
+              return _this5.onScrollEndDrag(e, _this5.props.id);
+            },
+            dataSource: this.state.dataSource,
+            renderRow: function renderRow(item, sectionID, rowId) {
+              return _this5.renderOption(item, _this5.props.optionBlockStyle);
+            },
+            enableEmptySections: true,
+            initialListSize: this.optionsData.length,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 145
+            }
+          })
+        );
+      }
+    }]);
+
+    return RkOptionsList;
+  }(_rkComponent.RkComponent);
+});

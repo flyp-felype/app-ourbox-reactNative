@@ -1,0 +1,13 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+   module.exports = require(_dependencyMap[0], "react-native/Libraries/Image/AssetRegistry").registerAsset({
+      "__packager_asset": true,
+      "httpServerLocation": "/assets/node_modules/react-native-ui-kitten/src/assets/img/choice",
+      "width": 17,
+      "height": 18,
+      "scales": [1, 2, 3],
+      "hash": "ce86011f77f6b2232e75fec836bc47ae",
+      "name": "crossMark",
+      "type": "png",
+      "fileHashes": ["d795b79d7ad1a1d4cbdd19e947b04090", "5b835477eff92b1075f8375eec9d414a", "ac2596262dbfbfac3bf1d0de7c51baac"]
+   });
+});

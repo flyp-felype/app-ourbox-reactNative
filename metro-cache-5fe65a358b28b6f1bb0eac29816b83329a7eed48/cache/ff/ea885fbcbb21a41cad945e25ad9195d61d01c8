@@ -1,0 +1,86 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RkOption = undefined;
+  var _jsxFileName = "/home/flyp/Projetos/ourboxapp/node_modules/react-native-ui-kitten/src/components/picker/rkOption.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _react = require(_dependencyMap[0], "react");
+
+  var _react2 = _interopRequireDefault(_react);
+
+  var _reactNative = require(_dependencyMap[1], "react-native");
+
+  var _rkText = require(_dependencyMap[2], "../text/rkText");
+
+  var _rkComponent = require(_dependencyMap[3], "../rkComponent");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var RkOption = exports.RkOption = function (_RkComponent) {
+    _inherits(RkOption, _RkComponent);
+
+    function RkOption(props) {
+      _classCallCheck(this, RkOption);
+
+      var _this = _possibleConstructorReturn(this, (RkOption.__proto__ || Object.getPrototypeOf(RkOption)).call(this, props));
+
+      _this.componentName = 'RkOption';
+      _this.optionHeight = _this.props.optionHeight || 30;
+      _this.optionRkType = _this.props.optionRkType || 'subtitle large';
+      _this.selectedOptionRkType = _this.props.selectedOptionRkType || 'header xlarge';
+      return _this;
+    }
+
+    _createClass(RkOption, [{
+      key: "compareOptions",
+      value: function compareOptions(option1, option2) {
+        return option1.key && option2.key && option1.key === option2.key || !option1.key && !option2.key && option1 === option2;
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var isSelected = this.compareOptions(this.props.data, this.props.selectedOption);
+        var rkType = isSelected ? this.selectedOptionRkType : this.optionRkType;
+        var styles = [this.props.style, {
+          height: this.optionHeight
+        }];
+        isSelected && styles.push(this.props.selectedStyle);
+
+        if (isSelected) {}
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          {
+            style: styles,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 36
+            }
+          },
+          _react2.default.createElement(
+            _rkText.RkText,
+            {
+              rkType: rkType,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 37
+              }
+            },
+            this.props.data.value || this.props.data
+          )
+        );
+      }
+    }]);
+
+    return RkOption;
+  }(_rkComponent.RkComponent);
+});

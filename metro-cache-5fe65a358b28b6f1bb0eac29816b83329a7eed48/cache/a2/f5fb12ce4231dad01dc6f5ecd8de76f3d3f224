@@ -1,0 +1,198 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RkChoiceGroup = undefined;
+  var _jsxFileName = "/home/flyp/Projetos/ourboxapp/node_modules/react-native-ui-kitten/src/components/choiceGroup/rkChoiceGroup.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _react = require(_dependencyMap[0], "react");
+
+  var _react2 = _interopRequireDefault(_react);
+
+  var _reactNative = require(_dependencyMap[1], "react-native");
+
+  var _lodash = require(_dependencyMap[2], "lodash");
+
+  var _lodash2 = _interopRequireDefault(_lodash);
+
+  var _rkChoice = require(_dependencyMap[3], "../choice/rkChoice");
+
+  var _rkComponent = require(_dependencyMap[4], "../rkComponent");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var RkChoiceGroup = exports.RkChoiceGroup = function (_RkComponent) {
+    _inherits(RkChoiceGroup, _RkComponent);
+
+    function RkChoiceGroup(props) {
+      _classCallCheck(this, RkChoiceGroup);
+
+      var _this = _possibleConstructorReturn(this, (RkChoiceGroup.__proto__ || Object.getPrototypeOf(RkChoiceGroup)).call(this, props));
+
+      _this.componentName = 'RkChoiceGroup';
+      _this.typeMapping = {
+        container: {}
+      };
+      _this.choice = {};
+
+      if (props.selectedIndex !== undefined) {
+        _this.choice[+props.selectedIndex] = true;
+      }
+
+      _this.state = {
+        selectionWasUpdated: false
+      };
+      return _this;
+    }
+
+    _createClass(RkChoiceGroup, [{
+      key: "componentWillMount",
+      value: function componentWillMount() {
+        var _this2 = this;
+
+        var index = 0;
+
+        var process = function process(child) {
+          if (child.type === _rkChoice.RkChoice && _this2.choice[index] === undefined) {
+            _this2.choice[index++] = child.props.selected;
+          } else if (child.props && child.props.children) {
+            _react2.default.Children.map(child.props.children, process);
+          }
+        };
+
+        _react2.default.Children.map(this.props.children, process);
+      }
+    }, {
+      key: "_onSelect",
+      value: function _onSelect(index) {
+        this.props.radio && this._clearChoice();
+        this.choice[index] = this.props.radio ? true : !this.choice[index];
+        this.props.onChange && this.props.onChange(index);
+        this.setState({
+          selectionWasUpdated: true
+        });
+      }
+    }, {
+      key: "_clearChoice",
+      value: function _clearChoice() {
+        var _this3 = this;
+
+        Object.keys(this.choice).forEach(function (key) {
+          return _this3.choice[key] = false;
+        });
+      }
+    }, {
+      key: "_appendChoiceProps",
+      value: function _appendChoiceProps(props, child) {
+        if (this.props.disabled !== undefined && child.props.disabled === undefined) props.disabled = this.props.disabled;
+      }
+    }, {
+      key: "_processNotClickTrigger",
+      value: function _processNotClickTrigger(child, index) {
+        var newSelectedValue = index === this.props.selectedIndex ? true : child.props.selected;
+
+        if (this.props.onChange && newSelectedValue !== this.choice[index] && newSelectedValue) {
+          this.props.onChange(index);
+        }
+
+        this.props.radio && newSelectedValue && this._clearChoice();
+        this.choice[index] = newSelectedValue;
+      }
+    }, {
+      key: "_processTrigger",
+      value: function _processTrigger(child, index) {
+        var _this4 = this;
+
+        var props = {};
+
+        if (child.type === _rkChoice.RkChoice) {
+          !this.state.selectionWasUpdated && this._processNotClickTrigger(child, index);
+          props.selected = this.choice[index];
+          props.inTrigger = true;
+
+          this._appendChoiceProps(props, child);
+        } else if (child.props && child.props.children) {
+          props.children = _lodash2.default.isArray(child.props.children) ? _react2.default.Children.map(child.props.children, function (child) {
+            return _this4._processTrigger(child, index);
+          }) : this._processTrigger(child.props.children, index);
+        }
+
+        return typeof child === 'string' ? child : _react2.default.cloneElement(child, props);
+      }
+    }, {
+      key: "_processChild",
+      value: function _processChild(child) {
+        var _this5 = this;
+
+        var passProps = {};
+
+        if (child.type === _rkChoice.RkChoice) {
+          var choiceIndex = this.globalChoiceIndex++;
+
+          passProps.onPress = function () {
+            return _this5._onSelect(choiceIndex);
+          };
+
+          passProps.selected = this.choice[choiceIndex];
+
+          this._appendChoiceProps(passProps, child);
+        } else if (child.props && child.props.choiceTrigger) {
+          var _choiceIndex = this.globalChoiceIndex++;
+
+          passProps.onPress = function () {
+            return _this5._onSelect(_choiceIndex);
+          };
+
+          passProps.children = this._processTrigger(child.props.children, _choiceIndex);
+        } else if (child.props && child.props.children) {
+          passProps.children = _lodash2.default.isArray(child.props.children) ? _react2.default.Children.map(child.props.children, function (child) {
+            return _this5._processChild(child);
+          }) : this._processChild(child.props.children);
+        }
+
+        return typeof child === 'string' ? child : _react2.default.cloneElement(child, passProps);
+      }
+    }, {
+      key: "_processChildren",
+      value: function _processChildren() {
+        var _this6 = this;
+
+        this.globalChoiceIndex = 0;
+        return _react2.default.Children.map(this.props.children, function (child) {
+          return _this6._processChild(child);
+        });
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _defineStyles = this.defineStyles(),
+            container = _defineStyles.container;
+
+        var children = this._processChildren();
+
+        this.state.selectionWasUpdated = false;
+        return _react2.default.createElement(
+          _reactNative.View,
+          {
+            style: [container, this.props.style],
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 206
+            }
+          },
+          children
+        );
+      }
+    }]);
+
+    return RkChoiceGroup;
+  }(_rkComponent.RkComponent);
+});

@@ -17,7 +17,9 @@ __d(function (global, require, module, exports, _dependencyMap) {
 
   var _reactNative = require(_dependencyMap[2], "react-native");
 
-  var _reactNativeUiKitten = require(_dependencyMap[3], "react-native-ui-kitten");
+  var _Header = require(_dependencyMap[3], "./components/Header");
+
+  var _Header2 = _interopRequireDefault(_Header);
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61,22 +63,17 @@ __d(function (global, require, module, exports, _dependencyMap) {
         return _react3.default.createElement(
           _reactNative.View,
           {
-            style: styles.container,
             __source: {
               fileName: _jsxFileName,
               lineNumber: 8
             }
           },
-          _react3.default.createElement(
-            _reactNativeUiKitten.RkButton,
-            {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 9
-              }
-            },
-            "Novo Bot\xE3o"
-          )
+          _react3.default.createElement(_Header2.default, {
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 9
+            }
+          })
         );
       }
     }]);

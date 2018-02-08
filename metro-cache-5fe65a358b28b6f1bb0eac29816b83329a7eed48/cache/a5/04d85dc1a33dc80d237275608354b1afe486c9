@@ -1,0 +1,31 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _reactNative = require(_dependencyMap[0], "react-native");
+
+  var _styles = require(_dependencyMap[1], "../styles");
+
+  var styles = _reactNative.StyleSheet.create({
+    container: {
+      backgroundColor: _styles.colors.white,
+      height: _styles.metrics.headerHeight,
+      paddingTop: _styles.metrics.headerPadding,
+      paddingHorizontal: _styles.metrics.padding,
+      borderBottomWidth: 1,
+      borderColor: _styles.colors.lighter,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    icon: {
+      color: _styles.colors.primary
+    },
+    title: {
+      fontSize: _styles.fonts.big
+    }
+  });
+
+  exports.default = styles;
+});
